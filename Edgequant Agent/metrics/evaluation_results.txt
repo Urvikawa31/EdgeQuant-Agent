@@ -1,0 +1,28 @@
+MODEL INFO
+----------------------
+Model Used: gemini-3-flash-preview:cloud
+
+INDIVIDUAL ASSET METRICS
+
+BTC
+----------------------
+Cumulative Return: 0.0000
+Sharpe Ratio: 0.0000
+Max Drawdown: 0.0000
+Volatility: 0.0000
+
+TSLA
+----------------------
+Cumulative Return: 0.0000
+Sharpe Ratio: 0.0000
+Max Drawdown: 0.0000
+Volatility: 0.0000
+
+
+PORTFOLIO METRICS
+
+               Metric  Equal Weight Portfolio  Agent Portfolio
+    Cumulative Return                0.188627                0
+         Sharpe Ratio                2.387286                0
+         Max Drawdown                0.117480                0
+Annualized Volatility                0.381591                0

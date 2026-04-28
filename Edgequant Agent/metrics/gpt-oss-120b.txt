@@ -1,0 +1,28 @@
+MODEL INFO
+----------------------
+Model Used: gpt-oss:120b-cloud
+
+INDIVIDUAL ASSET METRICS
+
+BTC
+----------------------
+Cumulative Return: -0.0444
+Sharpe Ratio: -0.3740
+Max Drawdown: 0.1910
+Volatility: 0.3871
+
+TSLA
+----------------------
+Cumulative Return: 0.4061
+Sharpe Ratio: 5.1522
+Max Drawdown: 0.0949
+Volatility: 0.3323
+
+
+PORTFOLIO METRICS
+
+               Metric  Equal Weight Portfolio  Agent Portfolio
+    Cumulative Return                0.188627         0.180871
+         Sharpe Ratio                2.387286         3.164874
+         Max Drawdown                0.117480         0.082248
+Annualized Volatility                0.381591         0.266215

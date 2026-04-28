@@ -1,0 +1,13 @@
+{
+  "env_date_path": {
+    "BTC": "data/btc.json",
+    "TSLA": "data/tsla.json"
+  },
+  "start_date": "2026-04-27",
+  "end_date": "2026-04-27",
+  "symbol": [
+    "BTC",
+    "TSLA"
+  ],
+  "momentum_window_size": 3
+}

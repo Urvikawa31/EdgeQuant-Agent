@@ -1,0 +1,47 @@
+2026-04-24 22:46:07.776 | INFO     | src.competition_api:init_agent:65 - SYS-Loading agent from checkpoint: outputs\warmup\agent
+2026-04-24 22:46:07.776 | INFO     | src.agent:__init__:43 - SYS-Initializing FinMemAgent
+2026-04-24 22:46:07.776 | INFO     | src.memory_db:__init__:132 - SYS-Initializing MemoryDB (Chroma)
+2026-04-24 22:46:07.776 | INFO     | src.embedding:__init__:31 - EMB-Loading local embedding model: BAAI/bge-small-en-v1.5
+2026-04-24 22:46:13.601 | INFO     | src.agent:load_checkpoint:493 - 🔥 Creating FRESH portfolio for TEST (not loading warmup P&L)
+2026-04-24 22:46:13.602 | INFO     | src.agent:load_checkpoint:501 - ✅ Full Agent state restored from outputs\warmup\agent
+2026-04-24 22:46:13.603 | INFO     | src.competition_api:init_agent:71 - SYS-Agent loaded successfully from checkpoint.
+2026-04-24 22:46:13.603 | INFO     | src.competition_api:startup_event:113 - SYS-Checking connectivity to https://ollama.com/api/generate...
+2026-04-24 22:46:15.092 | INFO     | src.competition_api:startup_event:115 - SYS-Chat endpoint is REACHABLE.
+2026-04-24 22:50:41.644 | INFO     | src.competition_api:get_trading_decision:229 - 🚀 Processing decision for BTC | Date: 2026-04-22
+2026-04-24 22:50:43.596 | WARNING  | src.memory_db:add_memory:177 - Memory ID 847 already exists. Skipping.
+2026-04-24 22:50:43.758 | INFO     | src.agent:_multi_assets_trade_action:207 - 
+🚀 STARTING MULTI-ASSET TRADING STEP
+2026-04-24 22:50:43.758 | INFO     | src.agent:_multi_assets_trade_action:277 - 📤 PROMPTS GENERATED
+2026-04-24 22:50:43.758 | INFO     | src.agent:_multi_assets_trade_action:309 - 📤 SENDING PROMPT FOR BTC (Length: 7363)
+2026-04-24 22:50:43.760 | INFO     | src.agent:_multi_assets_trade_action:310 - DEBUG-PROMPT-SNAPSHOT: ### YOUR ROLE:
+You are the Head of Digital Assets for a Global Macro Fund. Focus on liquidity clusters, institutional ETF flows, and network resilience. Capture Alpha from volatility; ignore retail no...
+2026-04-24 22:50:48.361 | INFO     | src.agent:_multi_assets_trade_action:317 - 📥 RESPONSE [BTC]: {
+  "investment_decision": "BUY",
+  "reasoning": "Forceful Accumulation (Institutional ETF/Treasury inflows) | Net Flow Impact: Positive | Magnitude: 4/5 | Trust Score: +0.70"
+}
+2026-04-24 22:50:48.362 | INFO     | src.agent:_multi_assets_trade_action:374 - 
+📊 FINAL ACTIONS TAKEN
+2026-04-24 22:50:48.362 | INFO     | src.agent:_multi_assets_trade_action:376 -   BTC: BUY
+2026-04-24 22:50:48.363 | INFO     | src.agent:_store_reflections:404 - 🧠 STORING REFLECTION for BTC: Decision: BUY | Reasoning: Forceful Accumulation (Institutional ETF/Treasury inflows) | Net Flow Imp...
+2026-04-24 22:50:48.409 | WARNING  | src.memory_db:add_memory:177 - Memory ID 848 already exists. Skipping.
+2026-04-24 22:50:48.409 | INFO     | src.agent:_multi_assets_trade_action:394 - ✅ STEP COMPLETED
+2026-04-24 22:50:48.409 | INFO     | src.competition_api:get_trading_decision:243 - SYS-Decision for BTC: BUY
+2026-04-24 22:56:13.171 | INFO     | src.competition_api:get_trading_decision:229 - 🚀 Processing decision for TSLA | Date: 2026-03-18
+2026-04-24 22:56:13.388 | WARNING  | src.memory_db:add_memory:177 - Memory ID 849 already exists. Skipping.
+2026-04-24 22:56:13.543 | INFO     | src.agent:_multi_assets_trade_action:207 - 
+🚀 STARTING MULTI-ASSET TRADING STEP
+2026-04-24 22:56:13.544 | INFO     | src.agent:_multi_assets_trade_action:277 - 📤 PROMPTS GENERATED
+2026-04-24 22:56:13.544 | INFO     | src.agent:_multi_assets_trade_action:309 - 📤 SENDING PROMPT FOR TSLA (Length: 9079)
+2026-04-24 22:56:13.544 | INFO     | src.agent:_multi_assets_trade_action:310 - DEBUG-PROMPT-SNAPSHOT: ### YOUR ROLE:
+You are a skeptical Senior Equity Analyst specializing in Tesla. Focus on unit-delivery variance, margin compression, and FSD monetization. Prioritize immediate execution and competitiv...
+2026-04-24 22:56:21.008 | INFO     | src.agent:_multi_assets_trade_action:317 - 📥 RESPONSE [TSLA]: {
+  "investment_decision": "SELL",
+  "reasoning": "[TIER 2] Magnitude: 3/5 | Variance: Negative surprise vs recent downtrend | Catalyst: Emerging high‑range EVs (BMW) and widespread Nvidia autonomous stacks intensify competitive pressure on Tesla's margins and market share | Conviction: Medium"
+}
+2026-04-24 22:56:21.008 | INFO     | src.agent:_multi_assets_trade_action:374 - 
+📊 FINAL ACTIONS TAKEN
+2026-04-24 22:56:21.008 | INFO     | src.agent:_multi_assets_trade_action:376 -   TSLA: SELL
+2026-04-24 22:56:21.009 | INFO     | src.agent:_store_reflections:404 - 🧠 STORING REFLECTION for TSLA: Decision: SELL | Reasoning: [TIER 2] Magnitude: 3/5 | Variance: Negative surprise vs recent downtren...
+2026-04-24 22:56:21.056 | WARNING  | src.memory_db:add_memory:177 - Memory ID 850 already exists. Skipping.
+2026-04-24 22:56:21.056 | INFO     | src.agent:_multi_assets_trade_action:394 - ✅ STEP COMPLETED
+2026-04-24 22:56:21.057 | INFO     | src.competition_api:get_trading_decision:243 - SYS-Decision for TSLA: SELL
