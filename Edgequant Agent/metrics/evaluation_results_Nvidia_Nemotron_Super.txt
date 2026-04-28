@@ -1,0 +1,28 @@
+MODEL INFO
+----------------------
+Model Used: nemotron-3-super:cloud
+
+INDIVIDUAL ASSET METRICS
+
+BTC
+----------------------
+Cumulative Return: -0.1527
+Sharpe Ratio: -1.8938
+Max Drawdown: 0.2576
+Volatility: 0.3845
+
+TSLA
+----------------------
+Cumulative Return: 0.0440
+Sharpe Ratio: 0.7721
+Max Drawdown: 0.1228
+Volatility: 0.3486
+
+
+PORTFOLIO METRICS
+
+               Metric  Equal Weight Portfolio  Agent Portfolio
+    Cumulative Return                0.188627        -0.054378
+         Sharpe Ratio                2.387286        -0.866594
+         Max Drawdown                0.117480         0.134846
+Annualized Volatility                0.381591         0.270252

@@ -1,0 +1,28 @@
+MODEL INFO
+----------------------
+Model Used: mistral-large-3:675b-cloud
+
+INDIVIDUAL ASSET METRICS
+
+BTC
+----------------------
+Cumulative Return: -0.1272
+Sharpe Ratio: -1.6608
+Max Drawdown: 0.2321
+Volatility: 0.3576
+
+TSLA
+----------------------
+Cumulative Return: 0.2143
+Sharpe Ratio: 2.8996
+Max Drawdown: 0.1211
+Volatility: 0.3456
+
+
+PORTFOLIO METRICS
+
+               Metric  Equal Weight Portfolio  Agent Portfolio
+    Cumulative Return                0.188627         0.043565
+         Sharpe Ratio                2.387286         0.903956
+         Max Drawdown                0.117480         0.116020
+Annualized Volatility                0.381591         0.268975

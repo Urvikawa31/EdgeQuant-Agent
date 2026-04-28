@@ -1,0 +1,28 @@
+MODEL INFO
+----------------------
+Model Used: gemma3:27b-cloud
+
+INDIVIDUAL ASSET METRICS
+
+BTC
+----------------------
+Cumulative Return: -0.1007
+Sharpe Ratio: -1.1372
+Max Drawdown: 0.2001
+Volatility: 0.3862
+
+TSLA
+----------------------
+Cumulative Return: 0.1322
+Sharpe Ratio: 1.9098
+Max Drawdown: 0.1318
+Volatility: 0.3468
+
+
+PORTFOLIO METRICS
+
+               Metric  Equal Weight Portfolio  Agent Portfolio
+    Cumulative Return                0.188627         0.015752
+         Sharpe Ratio                2.387286         0.428876
+         Max Drawdown                0.117480         0.101205
+Annualized Volatility                0.381591         0.249331
