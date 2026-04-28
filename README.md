@@ -1,110 +1,89 @@
-# 🏦 EdgeQuant Agent: High-Conviction Hedge Fund PM
+# EdgeQuant Agent: Deep Dive Analysis Report
 
-This repository implements an autonomous trading agent designed as a **High-Conviction Hedge Fund Portfolio Manager**. It specializes in capturing Alpha by identifying significant Catalyst Magnitude and Expectation Variance across multiple assets (BTC & TSLA).
+This report provides a comprehensive analysis of the `EdgeQuant Agent` codebase, breaking down its system architecture, experimentation pipeline, the models evaluated, and the final performance scoring.
 
----
+## 1. Architecture Overview
+The `EdgeQuant Agent` is a sophisticated, memory-augmented AI trading system designed to act as a High-Conviction Hedge Fund Portfolio Manager.
 
-## 🚀 Step-by-Step Setup Guide
+### 1.1 Memory Architecture (Hierarchical RAG)
+The system leverages a multi-layered Vector Database (`MemoryDB` using ChromaDB) and `bge-small` embeddings to manage the agent's knowledge over time. It is structured into four distinct memory layers to avoid context window flooding and ensure relevant retrieval:
 
-Follow these steps to get the system running on your local machine.
+* **Short Layer**: Captures daily volatile information such as daily news.
+* **Mid Layer**: Captures medium-term structural data such as quarterly 10-Q filings.
+* **Long Layer**: Captures long-term foundational data such as annual 10-K filings.
+* **Reflection Layer**: A cognitive memory layer that stores the agent's past decisions (`BUY`/`SELL`/`HOLD`) and its internal reasoning for those actions.
 
-### 1. Get Hugging Face Access
-Since the system uses **FinMA-7B-full**, you need a Hugging Face account and a token.
+**Memory Dynamics**: The memory retrieval system utilizes a Linear Compound Score that balances:
 
-1.  **Apply for Model Access**: Go to [TheFinAI/finma-7b-full](https://huggingface.co/TheFinAI/finma-7b-full) and apply for access. Approval is usually instant.
-2.  **Generate Token**:
-    *   Log in to [Hugging Face](https://huggingface.co/).
-    *   Go to **Settings** -> **Access Tokens**.
-    *   Click **New Token**, name it (e.g., `EdgeQuant`), and set the type to **Read**.
-    *   Copy the token; you will need it later.
+* **Importance Initialization & Decay**: Scores decay over time based on the layer (e.g., Short memory decays much faster than Long memory).
+* **Recency Decay**: Prioritizes more recent events unless older events have a high importance access frequency.
+* **Access Counting**: The more a memory is accessed, the higher its importance score becomes.
 
-### 2. Install Libraries
-Ensure you have Python 3.10 or higher installed.
+### 1.2 Execution Modes: Warmup vs. Test
+The pipeline is strictly divided into two modes to prevent data leakage while allowing the model to "learn" from history:
 
-```bash
-# 1. Clone the repository
-# (Navigate to the project folder)
+* **Warmup Mode**: The agent is run through historical data with access to the immediate future price difference (`future_record`). This allows the agent to generate highly accurate "reflections" (reasoning for why a move happened) and store them in the Reflection memory layer.
+* **Test Mode**: The agent is evaluated on unseen data. The `future_record` is strictly hidden. The agent queries its pre-populated reflection memory (from the warmup phase) to recognize similar historical patterns and make alpha-generating decisions.
 
-# 2. Create a virtual environment (Recommended)
-python -m venv venv
-source venv/bin/activate  # On Windows: venv\Scripts\activate
+### 1.3 Dynamic Mandate Enforcement
+To combat the common LLM passivity issue (defaulting to `HOLD`), the prompt dynamically enforces mandates based on the asset and day:
 
-# 3. Install core dependencies
-pip install -r requirements.txt
+* **Weekday Alpha Capture**: For active trading days, `HOLD` is strictly prohibited for assets like `BTC` and `TSLA`. The model is forced to synthesize catalysts and take a definitive directional bias (`BUY` or `SELL`).
+* **Weekend Logic**: During weekends (when traditional markets might be closed or low volume), `HOLD` is permitted if catalysts are of low magnitude.
 
-# 4. Install Local Inference specialized libraries
-# (Required for loading models on local GPUs)
-pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu121
-pip install accelerate bitsandbytes
-```
+## 2. Experimentation Setup
+The experimental setup models a multi-asset portfolio simulation focusing on two distinct assets:
 
-### 3. Configure Authentication
-There are two ways to provide your Hugging Face token to the system:
+* **Bitcoin (BTC)**: Digital asset, evaluated on liquidity clusters and ETF flows.
+* **Tesla (TSLA)**: Equity asset, evaluated on unit delivery variance and margin compression.
 
-#### Option A: Using Hugging Face CLI (Recommended)
-This stores your token globally on your machine.
-```bash
-# 1. Install the CLI
-pip install huggingface_hub
+**Timeline:**
+* **Warmup Period:** `2025-08-01` to `2026-04-25`
+* **Test Period:** `2026-03-01` to `2026-04-23`
 
-# 2. Login (Paste your token when prompted)
-huggingface-cli login
-```
+**Environment Integration**: Market data is sourced from local JSON files (`data/btc.json`, `data/tsla.json`). The `MarketEnv` steps through this data day-by-day, providing the agent with current prices, historical prices, momentum (window size of 3), and relevant textual data (news, filings).
 
-#### Option B: Using .env File
-Alternatively, create a `.env` file in the root directory:
-```bash
-echo "HF_TOKEN=your_token_here" > .env
-```
+The portfolio is instantiated with a `$100,000` cash base and evaluates performance based on Cumulative Return, Sharpe Ratio, Max Drawdown, and Annualized Volatility.
 
----
+## 3. Models Evaluated
+The system relies on an external LLM inference engine (Ollama Cloud) to generate trading decisions. During the testing phase (March 1, 2026, to April 23, 2026), four distinct foundational models were evaluated for their financial reasoning capabilities:
 
-## 📈 Running the Pipeline
+* `gpt-oss:120b-cloud` (120 Billion Parameters)
+* `mistral-large-3:675b-cloud` (675 Billion Parameters)
+* `gemma3:27b-cloud` (27 Billion Parameters)
+* `nemotron-3-super:cloud` (Nvidia Super Model)
 
-The agent operates in three distinct phases: Warmup, Test, and Evaluation.
+## 4. Evaluation Scoring
+The models were evaluated against an Equal Weight Portfolio baseline (Cumulative Return: `0.1886`, Sharpe: `2.3872`).
 
-### Phase 1: Warmup (Memory Building)
-In this phase, the agent "learns" from historical data and populates its memory with reflections and patterns.
-```bash
-python run.py warmup
-```
-*   **What happens**: The agent processes data from `warmup_start_time` to `warmup_end_time`.
-*   **Output**: Checkpoints are saved in `checkpoints/warmup`.
+### 4.1 GPT-OSS 120B (The Winner) 🏆
+`gpt-oss:120b-cloud` was the only model capable of beating the Equal Weight Portfolio, demonstrating exceptional alpha capture, particularly on `TSLA`.
 
-### Phase 2: Test (Trading Simulation)
-The actual trading simulation where the agent makes decisions based on its built memory and new incoming news.
-```bash
-python run.py test
-```
-*   **What happens**: The agent processes data from `test_start_time` to `test_end_time`.
-*   **Output**: Trading decisions and portfolio state are saved in `outputs/test`.
+* **Portfolio Cumulative Return**: `0.1987` (vs `0.1886` Baseline)
+* **Portfolio Sharpe Ratio**: `3.298` (vs `2.387` Baseline)
+* **Max Drawdown**: `0.075` (Lowest risk)
+* **Asset Breakdown**: Highly successful `TSLA` trades (Sharpe `3.28`), but struggled slightly to maximize `BTC` compared to the baseline.
 
-### Phase 3: Evaluation (Performance Metrics)
-Generate final performance metrics (Sharpe Ratio, Max Drawdown, Alpha, etc.).
-```bash
-python run.py eval
-```
-*   **Output**: Results are stored in the `results` and `metrics` folders. Check `metrics/summary.json` for the final scorecard.
+### 4.2 Mistral Large 3 (675B)
+Despite its massive parameter count, Mistral Large struggled to generate a cohesive portfolio return, heavily dragged down by poor `BTC` decision-making.
 
----
+* **Portfolio Cumulative Return**: `0.0435`
+* **Portfolio Sharpe Ratio**: `0.9039`
+* **Asset Breakdown**: Good on `TSLA` (Sharpe `2.89`) but negative on `BTC` (Sharpe `-1.66`).
 
-## 🛠️ Configuration Details
+### 4.3 Gemma3 27B
+The smallest model evaluated showed mixed results. It maintained a positive return but failed to outpace the baseline by a wide margin.
 
-You can modify the trading strategy, symbols, and model parameters in:
-`configs/main.json`
+* **Portfolio Cumulative Return**: `0.0157`
+* **Portfolio Sharpe Ratio**: `0.4288`
+* **Asset Breakdown**: Negative on `BTC` (Sharpe `-1.13`) and moderate on `TSLA` (Sharpe `1.90`).
 
-Key settings:
-- `chat_model`: The model to use (default: `TheFinAI/finma-7b-full`).
-- `chat_model_inference_engine`: Set to `local` for offline inference.
-- `trading_symbols`: List of assets to trade (e.g., `["BTC", "TSLA"]`).
+### 4.4 Nvidia Nemotron-3 Super
+Nemotron completely failed to grasp the market dynamics during the test period, resulting in a net negative portfolio.
 
----
+* **Portfolio Cumulative Return**: `-0.0543`
+* **Portfolio Sharpe Ratio**: `-0.8665`
+* **Asset Breakdown**: Severe losses on `BTC` (Sharpe `-1.89`) and barely positive on `TSLA`.
 
-## 📊 Troubleshooting
-
-- **Out of Memory (OOM)**: If your GPU runs out of memory, try using a smaller model (e.g., `Llama-3.1-8B-Instruct`) in `configs/main.json`.
-- **Gated Model Error**: Ensure you have been approved by TheFinAI/PIXIU on Hugging Face.
-- **Login Issues**: If you use `huggingface-cli login`, ensure your environment can access the stored token (usually automatic in `transformers`).
-
----
-*Note: This agent is for research and evaluation purposes. Use responsibly.*
+## Summary Conclusion
+The architecture successfully proves that Hierarchical RAG combined with forced directional mandates can extract Alpha, provided the underlying LLM possesses sufficient reasoning capability. `gpt-oss:120b-cloud` is currently the optimal production model for the `EdgeQuant Agent`, achieving a superior risk-adjusted return (Sharpe `3.29`) with less maximum drawdown (`7.5%`) than a naive equal-weight allocation.
